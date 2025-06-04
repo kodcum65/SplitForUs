@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 import models, schemas
 from database import get_db, load_data, save_data
+from auth import get_current_user
 
 router = APIRouter()
 
