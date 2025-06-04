@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SplashScreen</class>
+ <widget class="QWidget" name="SplashScreen">
+  <!-- Bölüştür -->
+  <widget class="QPushButton" name="startButton">
+   <property name="geometry">
+    <rect><x>20</x><y>360</y><width>100</width><height>30</height></rect>
+   </property>
+   <property name="text"><string>Bölüştür</string></property>
+  </widget>
+  <!-- Kapat -->
+  <widget class="QPushButton" name="exitButton">
+   <property name="geometry">
+    <rect><x>570</x><y>10</y><width>20</width><height>20</height></rect>
+   </property>
+   <property name="text"><string>X</string></property>
+   <property name="flat"><bool>true</bool></property>
+  </widget>
+ </widget>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
+ <connections/>
+</ui>
