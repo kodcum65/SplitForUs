@@ -5,6 +5,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
+import os
 
 import models, schemas, utils
 from database import get_db
@@ -125,6 +126,37 @@ def verify_email(data: schemas.UserVerifyEmail, db: Session = Depends(get_db)):
     db.add(user)
     db.commit()
     return {"message": "E-posta başarıyla doğrulandı."}
+
+
+### 2b) DOĞRULAMA KODU YENİDEN GÖNDER #########################
+@router.post("/auth/resend-verification")
+def resend_verification_email(data: schemas.UserEmail, db: Session = Depends(get_db)):
+    """Kullanıcıya yeni bir e-posta doğrulama kodu gönderir."""
+    user = get_user_by_email(db, data.email)
+    if not user:
+        raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı.")
+    if user.email_verified:
+        return {"message": "E-posta zaten doğrulanmış."}
+
+    email_code = utils.generate_verification_code()
+    user.email_verification_code = email_code
+    db.add(user)
+    db.commit()
+
+    subject = "SplitForUs - E-posta Doğrulama Kodu"
+    body = (
+        f"Merhaba {user.username},\n\n"
+        f"SplitForUs hesabınızı etkinleştirmek için aşağıdaki doğrulama kodunu kullanın:\n\n"
+        f"Kod: {email_code}\n\n"
+        "Teşekkürler!"
+    )
+    try:
+        utils.send_email(user.email, subject, body)
+    except Exception as e:
+        print("E-posta gönderme hatası:", e)
+        print("Doğrulama kodu (konsolda):", email_code)
+
+    return {"message": "Doğrulama e-postası gönderildi."}
 
 
 ### 3) GİRİŞ (LOGIN) #########################################
