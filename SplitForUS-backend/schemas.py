@@ -20,6 +20,9 @@ class UserVerifyEmail(BaseModel):
     email: EmailStr
     code: str  # 6 haneli kod bekliyorum
 
+class UserEmail(BaseModel):
+    email: EmailStr
+
 class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"
